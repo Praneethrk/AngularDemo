@@ -1,0 +1,118 @@
+<div class="row mt-2">
+
+  <!-- Add faculty form -->
+  
+  <div class="col-sm-2">
+      <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+          Add Employee
+        </button>
+        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLabel">Add Employee</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <!-- form -->
+                  <form [formGroup]="f_form" (ngSubmit)="submitForm()">
+                      <div class="form-group">
+                        <input type="text" class="form-control" name="empno" id="empno" aria-describedby="emailHelp" placeholder="Enter Employee No." formControlName="empno">
+                        <small class="alert text-danger"
+                          *ngIf ="empno.touched && empno.invalid">
+                          EmpNo cann't be empty!
+                        </small>
+                      </div>
+                      <div class="form-group">
+                        <input type="text" class="form-control" name="ename" id="ename" placeholder="Enter Ename" formControlName="ename">
+                        <small class="alert text-danger"
+                          *ngIf ="ename.touched && ename.invalid">
+                          ename cann't be empty!
+                        </small>
+                      </div>
+                      <div class="form-group">
+                        <input type="text" class="form-control" name="qualification" id="qualification" placeholder="Enter Qualification" formControlName="qualification">
+                        <small class="alert text-danger"
+                          *ngIf ="qual.touched && qual.invalid">
+                          Qualification cann't be empty!
+                        </small>
+                      </div>
+                      <div class="form-group">
+                        <input type="text" class="form-control" name="dname" id="dname" placeholder="Enter Department" formControlName="dname">
+                        <small class="alert text-danger"
+                          *ngIf ="dept.touched && dept.invalid">
+                          Department cann't be empty!
+                        </small>
+                      </div>
+                      <button type="submit" class="btn btn-primary" [disabled]="f_form.invalid">Add Faculty</button>
+                    </form>
+                </div>
+              </div>
+            </div>
+          </div>
+    
+  </div>
+
+  <!-- Logic to search and display -->
+  <div class="col-sm-6">
+    <div class="form-group">
+      <input type="text" class="form-control" [(ngModel)]="searchStr" (keyup.enter)="getSearchResult()">
+    </div>
+
+    <div *ngIf="searchFaculty.length>0">
+      <table class="table table-hover table-dark">
+
+        <thead class="thead-dark">
+          <tr>
+
+            <th>EmpNo</th>
+            <th>Name</th>
+            <th>Qualification</th>
+            <th>Dept</th>
+
+          </tr>
+        </thead>
+        <tr *ngFor="let f of searchFaculty" class="bg-secondary">
+          <td>{{f.empno}}</td>
+          <td>{{f.ename}}</td>
+          <td>{{f.qualification}}</td>
+          <td>{{f.dname}}</td>
+
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- Charts -->
+  <div class="col-sm-4">
+
+    <select [(ngModel)]="chartType" (change)="changeChart()">
+      <option [(ngModel)]="PieChart" value="PieChart">Pie Chart</option>
+      <option [(ngModel)]="ColumnChart" value="ColumnChart">Column Chart</option>
+    </select>
+    <google-chart [data]="pieChart" (chartSelect)="getFacultyByDname($event)"></google-chart>
+    <ng-container *ngIf="chartResults[0]">
+      <table class="table table-hover table-dark">
+        <thead class="thead-dark">
+          <tr>
+            <th>EmpNo</th>
+            <th>Name</th>
+            <th>Qualification</th>
+            <th>Dept</th>
+
+          </tr>
+        </thead>
+        <tr *ngFor="let faculty of chartResults" class="bg-secondary">
+          <td>{{faculty.empno}}</td>
+          <td>{{faculty.ename}}</td>
+          <td>{{faculty.qualification}}</td>
+          <td>{{faculty.dname}}</td>
+
+        </tr>
+      </table>
+    </ng-container>
+  </div>
+
+</div>
